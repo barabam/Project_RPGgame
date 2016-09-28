@@ -3,8 +3,12 @@ using System.Collections;
 
 public class MonsterAction : MonoBehaviour
 {
-    public GameObject hero;
-    public float speed;
+    //---------- Hero 관련----------
+    [HideInInspector]
+    public float            speed;
+    public float            attack          = 5f;
+    public float            hp              = 50f;
+    //-----------  STATE  ---------
     public enum STATE
     {
         IDLE,
@@ -12,17 +16,20 @@ public class MonsterAction : MonoBehaviour
         ATTACK,
         DIE,
     }
-    public STATE state = STATE.IDLE;
+    public STATE            state           = STATE.IDLE;
+    //-------------------------------
 
-    private Vector3 heading = new Vector3();
-    private Vector3 other = new Vector3();
-    private float dp;
-    private Animator animator;
-    private Vector3 startpos;                                           //hero를 쫓아가다가 범위에서 벗어났을 때 돌아갈 위치
-    private NavMeshAgent navigation;                                    //네비게이션을 위해
+    private GameObject      hero;
+    private Vector3         heading         = new Vector3();
+    private Vector3         other           = new Vector3();
+    private float           dp;
+    private Animator        animator;
+    private Vector3         startpos;                                           //hero를 쫓아가다가 범위에서 벗어났을 때 돌아갈 위치
+    private NavMeshAgent    navigation;                                         //네비게이션을 위해
 
     void Awake()
     {
+        hero = GameObject.Find("Hero01");
         animator = this.GetComponentInChildren<Animator>();
         navigation = GetComponent<NavMeshAgent>();
         startpos = this.transform.position;
@@ -76,10 +83,6 @@ public class MonsterAction : MonoBehaviour
 
         if (length > 1 && length < 10)   //-------시야,감지범위에 들어가고, 공격범위까지
         {
-            //if (dp < Mathf.Cos(60f * Mathf.Deg2Rad))
-            //{
-            //    navigation.SetDestination(hero.transform.position);
-            //}
             animator.SetBool("move", true);
             navigation.SetDestination(hero.transform.position);
         }

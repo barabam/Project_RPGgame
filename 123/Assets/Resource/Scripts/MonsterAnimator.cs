@@ -3,7 +3,6 @@ using System.Collections;
 
 public class MonsterAnimator : MonoBehaviour
 {
-
     private Animator animator;
     private MonsterAction monsteraction;
 
@@ -11,6 +10,7 @@ public class MonsterAnimator : MonoBehaviour
 
     void Awake()
     {
+        monster = GameObject.Find("Monster01");
         monsteraction = monster.gameObject.GetComponent<MonsterAction>();
         animator = GetComponent<Animator>();
     }

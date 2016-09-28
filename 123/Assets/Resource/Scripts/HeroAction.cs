@@ -3,6 +3,10 @@ using System.Collections;
 
 public class HeroAction : MonoBehaviour
 {
+    public int              lv          = 1;
+    public float            hp          = 100f;
+    public float            attack      = 10f;
+
     public enum STATE
     {
         NONE = -1,

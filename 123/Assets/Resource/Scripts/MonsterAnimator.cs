@@ -5,8 +5,7 @@ public class MonsterAnimator : MonoBehaviour
 {
     private Animator animator;
     private MonsterAction monsteraction;
-
-    public GameObject monster;
+    private GameObject monster;
 
     void Awake()
     {
@@ -16,9 +15,9 @@ public class MonsterAnimator : MonoBehaviour
     }
 
     //==================애니메이터에서 이벤트로 호출===========
-    public void ReturnIdle()
+    public void ReturnCHASE()
     {
-        monsteraction.state = MonsterAction.STATE.IDLE;
+        monsteraction.state = MonsterAction.STATE.CHASE;
     }
     //=========================================================
 }

@@ -5,9 +5,9 @@ public class MonsterAction : MonoBehaviour
 {
     //---------- Hero 관련----------
     [HideInInspector]
-    public float            speed;
-    public float            attack          = 5f;
-    public float            hp              = 50f;
+    public float speed;
+    public float attack = 5f;
+    public float hp = 50f;
     //-----------  STATE  ---------
     public enum STATE
     {
@@ -16,16 +16,17 @@ public class MonsterAction : MonoBehaviour
         ATTACK,
         DIE,
     }
-    public STATE            state           = STATE.IDLE;
+    public STATE state = STATE.IDLE;
     //-------------------------------
 
-    private GameObject      hero;
-    private Vector3         heading         = new Vector3();
-    private Vector3         other           = new Vector3();
-    private float           dp;
-    private Animator        animator;
-    private Vector3         startpos;                                           //hero를 쫓아가다가 범위에서 벗어났을 때 돌아갈 위치
-    private NavMeshAgent    navigation;                                         //네비게이션을 위해
+    private float hero_attack;
+    private GameObject hero;
+    private Vector3 heading = new Vector3();
+    private Vector3 other = new Vector3();
+    private float dp;
+    private Animator animator;
+    private Vector3 startpos;                                           //hero를 쫓아가다가 범위에서 벗어났을 때 돌아갈 위치
+    private NavMeshAgent navigation;                                         //네비게이션을 위해
 
     void Awake()
     {
@@ -57,6 +58,7 @@ public class MonsterAction : MonoBehaviour
                 ProcessATTACK();
                 break;
             case STATE.DIE://----------------죽음
+                ProcessDIE();
                 break;
         }
     }
@@ -73,13 +75,16 @@ public class MonsterAction : MonoBehaviour
             state = STATE.CHASE;
             animator.SetBool("move", true);
         }
+        //----------------HP가 0이 될 시 STATE를 DIE로 변경-----------
+        else if (hp <= 0)
+            state = STATE.DIE;
+        //------------------------------------------------------------
     }
     //-------------------------------------------------------------------------------
     //-----------------------hero와의 시야각과 거리가 가까워 졌을 경우---------------
     void ProcessCHASE()
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
-        navigation.speed = 3f;
 
         if (length > 1 && length < 10)   //-------시야,감지범위에 들어가고, 공격범위까지
         {
@@ -91,12 +96,19 @@ public class MonsterAction : MonoBehaviour
             animator.SetBool("move", false);
             navigation.SetDestination(startpos);
         }
-        else if (length <= 1)                                                   //----------공격 범위에 들어갔을 경우
+        else if (length <= 1.5f)                                                   //----------공격 범위에 들어갔을 경우
         {
             animator.SetBool("move", false);
             navigation.SetDestination(this.transform.position);
             state = STATE.ATTACK;
         }
+        //----------------HP가 0이 될 시 STATE를 DIE로 변경-----------
+        else if (hp <= 0)
+        {
+            animator.SetBool("move", false);
+            state = STATE.DIE;
+        }
+        //------------------------------------------------------------
     }
     //-------------------------------------------------------------------------------
     //-----------------hero가 공격 사거리에 들어왔을 경우----------------------------
@@ -104,15 +116,41 @@ public class MonsterAction : MonoBehaviour
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
-        if (length < 1)
+        if (length < 1.5f)
         {
             animator.SetBool("attack", true);
+
+            //----------------HP가 0이 될 시 STATE를 DIE로 변경-----------
+            if (hp <= 0)
+            {
+                animator.SetBool("attack", false);
+                state = STATE.DIE;
+            }
+            //------------------------------------------------------------
         }
         else
         {
-            navigation.SetDestination(hero.transform.position);
+            //navigation.SetDestination(hero.transform.position);
             animator.SetBool("attack", false);
             state = STATE.CHASE;
+        }
+    }
+    //--------------------------------------------------------------------------------
+    //--------------------DIE상태일 때 -----------------------------------------------
+    void ProcessDIE()
+    {
+        animator.SetBool("die", true);
+    }
+    //--------------------------------------------------------------------------------
+    //--------------------hero의 무기에 맞았을 경우-----------------------------------
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.tag == "Hero_Attack")
+        {
+            hero_attack = hero.GetComponent<HeroAction>().attack;
+
+            hp = hp - hero_attack;
+            Debug.Log("Monster : " + hp);
         }
     }
     //--------------------------------------------------------------------------------

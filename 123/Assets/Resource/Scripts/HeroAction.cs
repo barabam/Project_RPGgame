@@ -3,9 +3,9 @@ using System.Collections;
 
 public class HeroAction : MonoBehaviour
 {
-    public int              lv          = 1;
-    public float            hp          = 100f;
-    public float            attack      = 10f;
+    public int lv = 1;
+    public float hp = 100f;
+    public float attack = 10f;
 
     public enum STATE
     {
@@ -22,6 +22,7 @@ public class HeroAction : MonoBehaviour
 
     private Animator animator;                                  //자식의 애니메이션이 들어갈 자리.
     private Vector3 move_vector;
+    private float monster_attack;
 
     void Start()
     {
@@ -42,7 +43,7 @@ public class HeroAction : MonoBehaviour
                 move_rotation_control();
                 break;
             case STATE.ATTACK://-------------일반공격
-                
+
                 break;
             case STATE.SKILL://--------------스킬
                 break;
@@ -105,7 +106,7 @@ public class HeroAction : MonoBehaviour
         }
         //==================================================================
     }
-    
+
     //================   MoveVector값을 넘겨줄 함수  =======================
     public void MoveVector()
     {
@@ -127,4 +128,16 @@ public class HeroAction : MonoBehaviour
         }
     }
     //=======================================================================
+    //--------------------Monster에게 맞았을 경우-----------------------------------
+    void OnTriggerEnter(Collider col)
+    {
+        if (col.tag == "Monster_Attack")
+        {
+            monster_attack = col.GetComponentInParent<MonsterAction>().attack;
+
+            hp = hp - monster_attack;
+            Debug.Log("Hero : " + hp);
+        }
+    }
+    //--------------------------------------------------------------------------------
 }

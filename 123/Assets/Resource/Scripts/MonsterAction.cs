@@ -19,6 +19,8 @@ public class MonsterAction : MonoBehaviour
     public STATE state = STATE.IDLE;
     //-------------------------------
 
+    private float die_timer;
+    private float timer;
     private float hero_attack;
     private GameObject hero;
     private Vector3 heading = new Vector3();
@@ -61,6 +63,8 @@ public class MonsterAction : MonoBehaviour
                 ProcessDIE();
                 break;
         }
+        //-------------중복된 피격을 방지하기 위한 타이머------------------------
+        timer += Time.deltaTime;
     }
 
     //----------------------근처에 hero가 없을 때-----------------------------------
@@ -140,17 +144,26 @@ public class MonsterAction : MonoBehaviour
     void ProcessDIE()
     {
         animator.SetBool("die", true);
+        die_timer += Time.deltaTime;
+
+        if (die_timer >= 5)
+            Destroy(this.gameObject);
     }
     //--------------------------------------------------------------------------------
     //--------------------hero의 무기에 맞았을 경우-----------------------------------
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag == "Hero_Attack")
+        if (timer >= 0.5f)
         {
-            hero_attack = hero.GetComponent<HeroAction>().attack;
+            if (col.tag == "Hero_Attack")
+            {
+                hero_attack = hero.GetComponent<HeroAction>().attack;
 
-            hp = hp - hero_attack;
-            Debug.Log("Monster : " + hp);
+                hp = hp - hero_attack;
+                Debug.Log("Monster : " + hp);
+
+                timer = 0;
+            }
         }
     }
     //--------------------------------------------------------------------------------

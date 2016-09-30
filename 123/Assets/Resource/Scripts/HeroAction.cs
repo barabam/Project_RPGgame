@@ -20,6 +20,7 @@ public class HeroAction : MonoBehaviour
     public float rotate_speed = 0f;                             //돌때 돌아가는 속도
     public STATE state = STATE.NONE;
 
+    private float timer;
     private Animator animator;                                  //자식의 애니메이션이 들어갈 자리.
     private Vector3 move_vector;
     private float monster_attack;
@@ -32,6 +33,7 @@ public class HeroAction : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
         //================================================================
     }
+
     void Update()
     {
         switch (state)
@@ -43,7 +45,7 @@ public class HeroAction : MonoBehaviour
                 move_rotation_control();
                 break;
             case STATE.ATTACK://-------------일반공격
-
+                ComboAttack();
                 break;
             case STATE.SKILL://--------------스킬
                 break;
@@ -51,6 +53,7 @@ public class HeroAction : MonoBehaviour
                 break;
         }
 
+        timer += Time.deltaTime;
     }
 
     private void move_rotation_control()
@@ -106,8 +109,16 @@ public class HeroAction : MonoBehaviour
         }
         //==================================================================
     }
-
-    //================   MoveVector값을 넘겨줄 함수  =======================
+    //----연속 공격을 위해 STATE가 ATTACK일 때 A버튼이 눌리는걸 다시 확인---
+    void ComboAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            animator.SetTrigger("HeroAttack");
+        }
+    }
+    //-----------------------------------------------------------------------
+    //================   MoveVector값을 넘겨줄 함수  ========================
     public void MoveVector()
     {
         if (Input.GetKey(KeyCode.RightArrow))
@@ -131,12 +142,17 @@ public class HeroAction : MonoBehaviour
     //--------------------Monster에게 맞았을 경우-----------------------------------
     void OnTriggerEnter(Collider col)
     {
-        if (col.tag == "Monster_Attack")
+        if (timer >= 0.5f)
         {
-            monster_attack = col.GetComponentInParent<MonsterAction>().attack;
+            if (col.tag == "Monster_Attack")
+            {
+                monster_attack = col.GetComponentInParent<MonsterAction>().attack;
 
-            hp = hp - monster_attack;
-            Debug.Log("Hero : " + hp);
+                hp = hp - monster_attack;
+                Debug.Log("Hero : " + hp);
+
+                timer = 0f;
+            }
         }
     }
     //--------------------------------------------------------------------------------

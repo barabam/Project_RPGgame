@@ -48,6 +48,7 @@ public class HeroAction : MonoBehaviour
                 ComboAttack();
                 break;
             case STATE.SKILL://--------------스킬
+                SkillAttack();
                 break;
             case STATE.DIE://----------------죽음
                 break;
@@ -105,7 +106,15 @@ public class HeroAction : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A))
         {
             animator.SetTrigger("HeroAttack");
+            attack = 10f;
             state = STATE.ATTACK;
+        }
+        //-----------------    스킬01       ---------------------------------
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            animator.SetTrigger("SKILL01");
+            attack = 30f;
+            state = STATE.SKILL;
         }
         //==================================================================
     }
@@ -118,6 +127,12 @@ public class HeroAction : MonoBehaviour
         }
     }
     //-----------------------------------------------------------------------
+    //=================       스킬01 사용 중     ============================
+    void SkillAttack()
+    {
+        Camera.main.transform.parent = transform;
+    }
+    //=======================================================================
     //================   MoveVector값을 넘겨줄 함수  ========================
     public void MoveVector()
     {

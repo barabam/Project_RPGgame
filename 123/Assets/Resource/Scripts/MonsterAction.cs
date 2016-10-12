@@ -97,7 +97,7 @@ public class MonsterAction : MonoBehaviour
         }
         else if (length >= 10)                                                  //----------일정 사거리 이상 벗어났을 경우
         {
-            animator.SetBool("move", false);
+            animator.SetBool("move", true);
             navigation.SetDestination(startpos);
         }
         else if (length <= 1.5f)                                                   //----------공격 범위에 들어갔을 경우

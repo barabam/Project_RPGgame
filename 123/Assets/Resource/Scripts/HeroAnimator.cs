@@ -20,4 +20,14 @@ public class HeroAnimator : MonoBehaviour
        heroaction.state = HeroAction.STATE.IDLE;
     }
     //=========================================================
+
+    //=====스킬 사용 후 캐릭터의 Rotation을 바로 잡아주기======
+    public void Orirotation()
+    {
+        animator.SetBool("SKILL01", false);
+        transform.position = hero.transform.position;
+        transform.rotation = hero.transform.rotation;
+        Debug.Log("Orirotation");
+    }
+    //=========================================================
 }

@@ -9,7 +9,15 @@ public class MonsterAnimator : MonoBehaviour
 
     void Awake()
     {
-        monster = GameObject.Find("Monster01");
+        if (this.gameObject.name == "mon01")
+        {
+            monster = GameObject.Find("Monster01");
+        }
+        else if (this.gameObject.name == "mon02")
+        {
+            monster = GameObject.Find("Monster02");
+        }
+
         monsteraction = monster.gameObject.GetComponent<MonsterAction>();
         animator = GetComponent<Animator>();
     }

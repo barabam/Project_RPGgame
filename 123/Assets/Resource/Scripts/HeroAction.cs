@@ -53,7 +53,9 @@ public class HeroAction : MonoBehaviour
             case STATE.DIE://----------------죽음
                 break;
         }
-
+        //----------------WeaponTail On/Off 기능--------------------------
+        onoff_WeaponTail();
+        //----------------------------------------------------------------
         timer += Time.deltaTime;
     }
 
@@ -108,6 +110,7 @@ public class HeroAction : MonoBehaviour
             animator.SetTrigger("HeroAttack");
             attack = 10f;
             state = STATE.ATTACK;
+            onoff_WeaponTail();
         }
         //-----------------    스킬01       ---------------------------------
         if (Input.GetKeyDown(KeyCode.S))
@@ -115,6 +118,7 @@ public class HeroAction : MonoBehaviour
             animator.SetTrigger("SKILL01");
             attack = 30f;
             state = STATE.SKILL;
+
         }
         //==================================================================
     }
@@ -171,4 +175,21 @@ public class HeroAction : MonoBehaviour
         }
     }
     //--------------------------------------------------------------------------------
+
+    //===========   WeaponTail On/Off 함수 ============================================
+    void onoff_WeaponTail()
+    {
+        if (state == STATE.ATTACK || state == STATE.SKILL)
+        {
+            Debug.Log("On Tail");
+            this.gameObject.GetComponent<Xft.XWeaponTrail>().enabled = true;
+        }
+
+        else if (state != STATE.ATTACK && state != STATE.SKILL)
+        {
+            Debug.Log("Off Tail");
+            this.gameObject.GetComponent<Xft.XWeaponTrail>().enabled = false;
+        }
+    }
+    //=================================================================================
 }

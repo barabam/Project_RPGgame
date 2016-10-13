@@ -71,7 +71,7 @@ public class MonsterAction : MonoBehaviour
     void ProcessIDLE()
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
-        navigation.speed = 1f;
+        navigation.speed = 5f;
 
         navigation.SetDestination(startpos);
         if (dp > Mathf.Cos(60f * Mathf.Deg2Rad) && length < 5)

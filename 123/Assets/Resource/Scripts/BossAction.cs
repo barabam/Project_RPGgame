@@ -90,24 +90,24 @@ public class BossAction : MonoBehaviour
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
-        if (length > 1 && length < 10)                                          //-------시야,감지범위에 들어가고, 공격범위까지
+        if (length > 4f && length < 10f)                                          //-------시야,감지범위에 들어가고, 공격범위까지
         {
             animator.SetBool("move", true);
             navigation.SetDestination(hero.transform.position);
         }
-        else if (length >= 10)                                                  //----------일정 사거리 이상 벗어났을 경우
+        else if (length >= 10f)                                                  //----------일정 사거리 이상 벗어났을 경우
         {
             animator.SetBool("move", true);
             navigation.SetDestination(startpos);
         }
-        else if (length <= 1.5f)                                                //----------공격 범위에 들어갔을 경우
+        else if (length <= 4f)                                                //----------공격 범위에 들어갔을 경우
         {
             animator.SetBool("move", false);
             navigation.SetDestination(this.transform.position);
             state = STATE.ATTACK;
         }
         //----------------HP가 0이 될 시 STATE를 DIE로 변경-----------
-        else if (hp <= 0)
+        else if (hp <= 0f)
         {
             animator.SetBool("move", false);
             state = STATE.DIE;
@@ -120,7 +120,7 @@ public class BossAction : MonoBehaviour
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
-        if (length < 1.5f)
+        if (length < 4f)
         {
             animator.SetBool("attack", true);
 
@@ -132,12 +132,6 @@ public class BossAction : MonoBehaviour
             }
             //------------------------------------------------------------
         }
-        else
-        {
-            //navigation.SetDestination(hero.transform.position);
-            animator.SetBool("attack", false);
-            state = STATE.CHASE;
-        }
     }
     //--------------------------------------------------------------------------------
     //--------------------DIE상태일 때 -----------------------------------------------
@@ -146,7 +140,7 @@ public class BossAction : MonoBehaviour
         animator.SetBool("die", true);
         die_timer += Time.deltaTime;
 
-        if (die_timer >= 5)
+        if (die_timer >= 5f)
             Destroy(this.gameObject);
     }
     //--------------------------------------------------------------------------------

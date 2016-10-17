@@ -107,6 +107,7 @@ public class HeroAction : MonoBehaviour
         //-------------        공격        ---------------------------------
         if (Input.GetKeyDown(KeyCode.A))
         {
+            GetComponentInChildren<HeroAnimator>().hero_collider.name = "collider_normal";
             animator.SetTrigger("HeroAttack");
             attack = 10f;
             state = STATE.ATTACK;
@@ -115,10 +116,8 @@ public class HeroAction : MonoBehaviour
         //-----------------    스킬01       ---------------------------------
         if (Input.GetKeyDown(KeyCode.S))
         {
-            animator.SetTrigger("SKILL01");
-            attack = 30f;
-            state = STATE.SKILL;
-
+            GetComponentInChildren<HeroAnimator>().hero_collider.name = "collider_skill01";
+            skill_control("SKILL01", 30f);
         }
         //==================================================================
     }
@@ -181,15 +180,22 @@ public class HeroAction : MonoBehaviour
     {
         if (state == STATE.ATTACK || state == STATE.SKILL)
         {
-            Debug.Log("On Tail");
             this.gameObject.GetComponent<Xft.XWeaponTrail>().enabled = true;
         }
 
         else if (state != STATE.ATTACK && state != STATE.SKILL)
         {
-            Debug.Log("Off Tail");
             this.gameObject.GetComponent<Xft.XWeaponTrail>().enabled = false;
         }
+    }
+    //=================================================================================
+
+    //============    스킬 정리   =====================================================
+    void skill_control(string ani_name, float skill_att)
+    {
+        animator.SetTrigger(ani_name);
+        attack = skill_att;
+        state = STATE.SKILL;
     }
     //=================================================================================
 }

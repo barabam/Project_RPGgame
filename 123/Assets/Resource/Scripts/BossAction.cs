@@ -18,6 +18,7 @@ public class BossAction : MonoBehaviour
     }
     public STATE state = STATE.IDLE;
     //-------------------------------
+    public GameObject effect01 = null;
 
     private float die_timer;
     private float timer;
@@ -109,6 +110,7 @@ public class BossAction : MonoBehaviour
         //----------------HP가 0이 될 시 STATE를 DIE로 변경-----------
         else if (hp <= 0f)
         {
+            animator.SetTrigger("die");
             animator.SetBool("move", false);
             state = STATE.DIE;
         }
@@ -127,6 +129,7 @@ public class BossAction : MonoBehaviour
             //----------------HP가 0이 될 시 STATE를 DIE로 변경-----------
             if (hp <= 0)
             {
+                animator.SetTrigger("die");
                 animator.SetBool("attack", false);
                 state = STATE.DIE;
             }
@@ -137,7 +140,9 @@ public class BossAction : MonoBehaviour
     //--------------------DIE상태일 때 -----------------------------------------------
     void ProcessDIE()
     {
-        animator.SetBool("die", true);
+        Collider col = this.GetComponent<CapsuleCollider>();
+        col.enabled = false;
+
         die_timer += Time.deltaTime;
 
         if (die_timer >= 5f)
@@ -151,6 +156,11 @@ public class BossAction : MonoBehaviour
         {
             if (col.tag == "Hero_Attack")
             {
+                //----------------공격받았을 때 이펙트 종류 검사----------------------
+                Instantiate(effect01, this.transform.position, Quaternion.identity);
+                //-------애니메이션---------------------------------------------------
+                animator.SetTrigger("hit");
+                //-------HeroAction에서 공격력을 받아옴-----------
                 hero_attack = hero.GetComponent<HeroAction>().attack;
 
                 hp = hp - hero_attack;

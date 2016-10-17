@@ -18,6 +18,7 @@ public class MonsterAction : MonoBehaviour
     }
     public STATE state = STATE.IDLE;
     //-------------------------------
+    public GameObject effect01 = null;
 
     private float die_timer;
     private float timer;
@@ -71,7 +72,7 @@ public class MonsterAction : MonoBehaviour
     void ProcessIDLE()
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
-        navigation.speed = 5f;
+        navigation.speed = 1f;
 
         navigation.SetDestination(startpos);
         if (dp > Mathf.Cos(60f * Mathf.Deg2Rad) && length < 5)
@@ -90,7 +91,7 @@ public class MonsterAction : MonoBehaviour
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
-        if (length > 1 && length < 10)   //-------시야,감지범위에 들어가고, 공격범위까지
+        if (length > 2 && length < 10)   //-------시야,감지범위에 들어가고, 공격범위까지
         {
             animator.SetBool("move", true);
             navigation.SetDestination(hero.transform.position);
@@ -100,7 +101,7 @@ public class MonsterAction : MonoBehaviour
             animator.SetBool("move", true);
             navigation.SetDestination(startpos);
         }
-        else if (length <= 1.5f)                                                   //----------공격 범위에 들어갔을 경우
+        else if (length <= 2f)                                                   //----------공격 범위에 들어갔을 경우
         {
             animator.SetBool("move", false);
             navigation.SetDestination(this.transform.position);
@@ -120,7 +121,7 @@ public class MonsterAction : MonoBehaviour
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
-        if (length < 1.5f)
+        if (length < 2f)
         {
             animator.SetBool("attack", true);
 
@@ -143,6 +144,11 @@ public class MonsterAction : MonoBehaviour
     //--------------------DIE상태일 때 -----------------------------------------------
     void ProcessDIE()
     {
+        //-------Collider를 찾아서 죽었을 경우 꺼준다.-----------
+        Collider col = this.GetComponent<BoxCollider>();
+        col.enabled = false;
+        //-------------------------------------------------------
+
         animator.SetBool("die", true);
         die_timer += Time.deltaTime;
 
@@ -157,6 +163,12 @@ public class MonsterAction : MonoBehaviour
         {
             if (col.tag == "Hero_Attack")
             {
+                //----------------공격받았을 때 이펙트 종류 검사----------------------
+                Instantiate(effect01, this.transform.position,Quaternion.identity);
+                //--------------------------------------------------------------------
+
+                state = STATE.CHASE;
+
                 hero_attack = hero.GetComponent<HeroAction>().attack;
 
                 hp = hp - hero_attack;

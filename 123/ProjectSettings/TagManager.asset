@@ -6,8 +6,14 @@ TagManager:
   tags:
   - Hero
   - Monster
-  - Hero_Attack
+  - Hero_Normal
   - Monster_Attack
+  - Effect
+  - Hero_SKILL01
+  - Hero_Attack
+  - FxTemporaire
+  - Boss_Attack
+  - debuff
   layers:
   - Default
   - TransparentFX

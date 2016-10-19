@@ -14,11 +14,19 @@ public class BossAction : MonoBehaviour
         IDLE,
         CHASE,
         ATTACK,
+        SKILL01,
+        SKILL02,
         DIE,
     }
     public STATE state = STATE.IDLE;
     //-------------------------------
-    public GameObject effect01 = null;
+    public GameObject effect_normal = null;
+    public GameObject effect_skill01 = null;
+
+    public GameObject effect_skill01_1 = null;
+    public GameObject effect_skill01_2 = null;
+
+    public GameObject effect_skill02 = null;
 
     private float die_timer;
     private float timer;
@@ -61,6 +69,12 @@ public class BossAction : MonoBehaviour
             case STATE.ATTACK://-------------Hero 를 공격
                 ProcessATTACK();
                 break;
+            case STATE.SKILL01://-------------Hero 를 skill 공격
+                ProcessSKILL01();
+                break;
+            case STATE.SKILL02:
+                ProcessSKILL02();
+                break;
             case STATE.DIE://----------------죽음
                 ProcessDIE();
                 break;
@@ -82,13 +96,18 @@ public class BossAction : MonoBehaviour
         }
         //----------------HP가 0이 될 시 STATE를 DIE로 변경-----------
         else if (hp <= 0)
+        {
+            animator.SetTrigger("die");
             state = STATE.DIE;
+        }
         //------------------------------------------------------------
     }
     //-------------------------------------------------------------------------------
     //-----------------------hero와의 시야각과 거리가 가까워 졌을 경우---------------
     void ProcessCHASE()
     {
+        float random = Random.Range(0f, 11f);                                  //-------패턴이 나올 확률
+
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
         if (length > 4f && length < 10f)                                          //-------시야,감지범위에 들어가고, 공격범위까지
@@ -105,7 +124,26 @@ public class BossAction : MonoBehaviour
         {
             animator.SetBool("move", false);
             navigation.SetDestination(this.transform.position);
-            state = STATE.ATTACK;
+
+            Debug.Log((int)random);
+            //---------------------------보스 패턴---------------------------------------
+            if ((int)random < 11f)
+            {
+                attack = 10f;
+                state = STATE.ATTACK;
+            }
+            if ((int)random >= 11f)
+            {
+                attack = 50f;
+                state = STATE.SKILL01;
+                Instantiate(effect_skill01_1,this.transform.position,Quaternion.identity);
+            }
+            if ((int)random >= 0f)
+            {
+                attack = 50f;
+                state = STATE.SKILL02;
+            }
+            //----------------------------------------------------------------------------
         }
         //----------------HP가 0이 될 시 STATE를 DIE로 변경-----------
         else if (hp <= 0f)
@@ -137,6 +175,18 @@ public class BossAction : MonoBehaviour
         }
     }
     //--------------------------------------------------------------------------------
+    //--------------------SKILL01 STATE일 때--------------------------------------------
+    void ProcessSKILL01()
+    {
+        animator.SetBool("skill01", true);
+    }
+    //--------------------------------------------------------------------------------
+    //--------------------SKILL02 STATE일 때--------------------------------------------
+    void ProcessSKILL02()
+    {
+        animator.SetBool("skill02", true);
+    }
+    //--------------------------------------------------------------------------------
     //--------------------DIE상태일 때 -----------------------------------------------
     void ProcessDIE()
     {
@@ -154,10 +204,18 @@ public class BossAction : MonoBehaviour
     {
         if (timer >= 0.5f)
         {
-            if (col.tag == "Hero_Attack")
+            if (col.name == "collider")
             {
                 //----------------공격받았을 때 이펙트 종류 검사----------------------
-                Instantiate(effect01, this.transform.position, Quaternion.identity);
+                if (col.tag == "Hero_Normal")
+                {
+                    Instantiate(effect_normal, this.transform.position, Quaternion.identity);
+                }
+
+                else if (col.tag == "Hero_SKILL01")
+                {
+                    Instantiate(effect_skill01, this.transform.position, Quaternion.identity);
+                }
                 //-------애니메이션---------------------------------------------------
                 animator.SetTrigger("hit");
                 //-------HeroAction에서 공격력을 받아옴-----------

@@ -6,6 +6,7 @@ public class HeroAction : MonoBehaviour
     public int lv = 1;
     public float hp = 100f;
     public float attack = 10f;
+    public float move_speed = 3f;                               //움직임 속도
 
     public enum STATE
     {
@@ -16,7 +17,6 @@ public class HeroAction : MonoBehaviour
         SKILL,
         DIE,
     }
-    public float move_speed = 3f;                               //움직임 속도
     public float rotate_speed = 0f;                             //돌때 돌아가는 속도
     public STATE state = STATE.NONE;
 
@@ -24,6 +24,7 @@ public class HeroAction : MonoBehaviour
     private Animator animator;                                  //자식의 애니메이션이 들어갈 자리.
     private Vector3 move_vector;
     private float monster_attack;
+    private float boss_attack;
 
     void Start()
     {
@@ -107,16 +108,20 @@ public class HeroAction : MonoBehaviour
         //-------------        공격        ---------------------------------
         if (Input.GetKeyDown(KeyCode.A))
         {
-            GetComponentInChildren<HeroAnimator>().hero_collider.name = "collider_normal";
+            //----------자신이 맞은 collider의 Tag으로 피격 이펙트 결정------------------
+            GetComponentInChildren<HeroAnimator>().hero_collider.tag = "Hero_Normal";
+            //----------------------------------------------------------------------------  
             animator.SetTrigger("HeroAttack");
             attack = 10f;
             state = STATE.ATTACK;
             onoff_WeaponTail();
         }
-        //-----------------    스킬01       ---------------------------------
+        //-----------------        스킬01       ---------------------------
         if (Input.GetKeyDown(KeyCode.S))
         {
-            GetComponentInChildren<HeroAnimator>().hero_collider.name = "collider_skill01";
+            //----------자신이 맞은 collider의 Tag으로 피격 이펙트 결정------------------
+            GetComponentInChildren<HeroAnimator>().hero_collider.tag = "Hero_SKILL01";
+            //----------------------------------------------------------------------------  
             skill_control("SKILL01", 30f);
         }
         //==================================================================
@@ -157,7 +162,7 @@ public class HeroAction : MonoBehaviour
         }
     }
     //=======================================================================
-    //--------------------Monster에게 맞았을 경우-----------------------------------
+    //--------------------     맞았을 경우      -----------------------------------
     void OnTriggerEnter(Collider col)
     {
         if (timer >= 0.5f)
@@ -168,6 +173,21 @@ public class HeroAction : MonoBehaviour
 
                 hp = hp - monster_attack;
                 Debug.Log("Hero : " + hp);
+
+                timer = 0f;
+            }
+            if (col.tag == "Boss_Attack")
+            {
+                boss_attack = col.GetComponentInParent<BossAction>().attack;
+
+                hp = hp - boss_attack;
+                Debug.Log("Hero : " + hp);
+
+                timer = 0f;
+            }
+            if (col.tag == "debuff")
+            {
+                move_speed = move_speed / 2;
 
                 timer = 0f;
             }

@@ -18,10 +18,11 @@ public class MonsterAction : MonoBehaviour
     }
     public STATE state = STATE.IDLE;
     //-------------------------------
-    public GameObject effect01 = null;
+    public GameObject effect_normal = null;
+    public GameObject effect_skill01 = null;
 
-    private float die_timer;
-    private float timer;
+    private float die_timer;                                            //체력이 0이되고, 사라지기까지의 시간을 재는 타이머
+    private float timer;                                                //중복피격을 막기 위한 타이머
     private float hero_attack;
     private GameObject hero;
     private Vector3 heading = new Vector3();
@@ -164,7 +165,11 @@ public class MonsterAction : MonoBehaviour
             if (col.tag == "Hero_Attack")
             {
                 //----------------공격받았을 때 이펙트 종류 검사----------------------
-                Instantiate(effect01, this.transform.position,Quaternion.identity);
+                if (col.name == "collider_normal")
+                    Instantiate(effect_normal, this.transform.position, Quaternion.identity);
+
+                else if (col.name == "collider_skill01")
+                    Instantiate(effect_skill01, this.transform.position, Quaternion.identity);
                 //--------------------------------------------------------------------
 
                 state = STATE.CHASE;

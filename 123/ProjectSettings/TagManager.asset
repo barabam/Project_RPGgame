@@ -13,7 +13,7 @@ TagManager:
   - Hero_Attack
   - FxTemporaire
   - Boss_Attack
-  - debuff
+  - debuff_smog
   layers:
   - Default
   - TransparentFX

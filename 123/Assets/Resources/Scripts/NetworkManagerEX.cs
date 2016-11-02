@@ -87,6 +87,9 @@ public class NetworkManagerEX : MonoBehaviour
                         case 1002: Debug.Log("이미 등록된 ID로 계정 생성에 실패 했습니다."); break;
                         case 1003: Debug.Log("게임 정보를 저장할 수 없습니다. \n확인하고 다시 시도하시기 바랍니다."); break;
                         case 1004: Debug.Log("등록된 계정이 아닙니다. \n확인하고 다시 시도하시기 바랍니다."); break;
+                        case 1006: Debug.Log("존재하지 않는 캐릭터입니다. \n확인하고 다시 시도하시기 바랍니다."); break;
+                        case 1007: Debug.Log("인벤토리 정보를 찾을 수 없습니다. \n확인하고 다시 시도하시기 바랍니다."); break;
+
                     }
                 }
                 // 실제 처리 결과물

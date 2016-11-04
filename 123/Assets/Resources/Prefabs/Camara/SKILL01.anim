@@ -371,7 +371,7 @@ AnimationClip:
   m_GenerateMotionCurves: 0
   m_Events:
   - time: 2.1166666
-    functionName: Hero_STATE_Change
+    functionName: StateRetrunIDLE
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

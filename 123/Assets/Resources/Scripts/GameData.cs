@@ -46,6 +46,7 @@ public class HeroInfo
     public int stat_defence;
     public List<int> skill = new List<int>();
     public List<int> equip = new List<int>();
+    public int gold;
 }
 
 public class InvenSlotInfo //인벤토리 슬롯 정보 정의

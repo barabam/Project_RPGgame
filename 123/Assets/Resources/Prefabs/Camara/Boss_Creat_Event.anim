@@ -31,6 +31,16 @@ AnimationClip:
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
+      - time: 2.25
+        value: {x: 33.237167, y: 180, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+      - time: 2.55
+        value: {x: 33.237167, y: 180, z: 0}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -51,6 +61,16 @@ AnimationClip:
         tangentMode: 0
       - time: 1
         value: {x: 0, y: 4.460624, z: 5}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+      - time: 2.25
+        value: {x: 0, y: 5.68, z: 6.86}
+        inSlope: {x: 0, y: 0, z: 0}
+        outSlope: {x: 0, y: 0, z: 0}
+        tangentMode: 0
+      - time: 2.55
+        value: {x: 0, y: 5.68, z: 6.86}
         inSlope: {x: 0, y: 0, z: 0}
         outSlope: {x: 0, y: 0, z: 0}
         tangentMode: 0
@@ -86,7 +106,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 1
+    m_StopTime: 2.55
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -114,12 +134,22 @@ AnimationClip:
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 1
       - time: 1
         value: 0
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 1
+      - time: 2.25
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 1
+      - time: 2.55
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 1
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -139,12 +169,22 @@ AnimationClip:
         value: 4.98
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 1
       - time: 1
         value: 4.460624
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 1
+      - time: 2.25
+        value: 5.68
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 1
+      - time: 2.55
+        value: 5.68
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 1
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -164,12 +204,22 @@ AnimationClip:
         value: 5
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 1
       - time: 1
         value: 5
         inSlope: 0
         outSlope: 0
-        tangentMode: 0
+        tangentMode: 1
+      - time: 2.25
+        value: 6.86
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 1
+      - time: 2.55
+        value: 6.86
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 1
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -191,6 +241,16 @@ AnimationClip:
         outSlope: 0
         tangentMode: 0
       - time: 1
+        value: 33.237167
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 2.25
+        value: 33.237167
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 2.55
         value: 33.237167
         inSlope: 0
         outSlope: 0
@@ -220,6 +280,16 @@ AnimationClip:
         inSlope: 0
         outSlope: 0
         tangentMode: 0
+      - time: 2.25
+        value: 180
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 2.55
+        value: 180
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
@@ -241,6 +311,16 @@ AnimationClip:
         outSlope: 0
         tangentMode: 0
       - time: 1
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 2.25
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+      - time: 2.55
         value: 0
         inSlope: 0
         outSlope: 0
@@ -286,4 +366,11 @@ AnimationClip:
   m_HasGenericRootTransform: 1
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 2.5333333
+    functionName: StateRetrunIDLE
+    data: 
+    objectReferenceParameter: {fileID: 0}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

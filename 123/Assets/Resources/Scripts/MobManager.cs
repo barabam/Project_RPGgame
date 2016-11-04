@@ -59,6 +59,7 @@ public class MobManager : MonoBehaviour
         mob.transform.parent = map03.transform;
         mob.GetComponent<BossAction>().startpos = boss_spawn_position.transform.position;
         mob.transform.position = boss_spawn_position.transform.position;
+        mob.transform.rotation = Quaternion.Euler(0f, 140f, 0f);
 
         mob.GetComponent<BossAction>().navigation.enabled = true;
 

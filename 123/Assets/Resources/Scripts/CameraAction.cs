@@ -30,7 +30,6 @@ public class CameraAction : MonoBehaviour
                 ProcessIDLE();
                 break;
             case STATE.EVENT://--------------Hero 발견 후 추적
-
                 break;
         }
     }
@@ -44,11 +43,31 @@ public class CameraAction : MonoBehaviour
 
     public IEnumerator CreatBossEvent()
     {
+        state = STATE.EVENT;
         boss01 = GameObject.Find("Monster_King(Clone)");
         this.transform.parent = boss01.transform;
         animator.enabled = true;
-        animator.SetTrigger("boss_creat_event");
+        animator.SetBool("boss_creat_event", true);
 
         yield return null;
+    }
+
+    public IEnumerator HeroSKILL01()
+    {
+        state = STATE.EVENT;
+        this.transform.parent = hero.transform;
+        animator.enabled = true;
+        animator.SetBool("hero_skill01", true);
+
+        yield return null;
+    }
+
+    public void StateRetrunIDLE()
+    {
+        Debug.Log("!!");
+        animator.SetBool("boss_creat_event", false);
+        animator.SetBool("hero_skill01", true);
+        state = STATE.IDLE;
+        this.transform.parent = hero.transform.parent;
     }
 }

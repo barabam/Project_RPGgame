@@ -6,8 +6,9 @@ public class HeroAction : MonoBehaviour
     public int lv = 1;
     public float hp = 100f;
     public float attack = 10f;
-    public float move_speed = 3f;                               //움직임 속도
+    public float move_speed = 10f;                               //움직임 속도
     public GameObject xweapontail;
+    public GameObject camera_;
 
     public enum STATE
     {
@@ -27,6 +28,7 @@ public class HeroAction : MonoBehaviour
     private Vector3 move_vector;
     private float monster_attack;
     private float boss_attack;
+    private float state_timer;                                  //스테이트 오류가 발생할 시 주기적으로 IDLE로 STATE를 변경시켜줌
 
     void Start()
     {
@@ -122,20 +124,31 @@ public class HeroAction : MonoBehaviour
         //-----------------        스킬01       ---------------------------
         if (Input.GetKeyDown(KeyCode.S))
         {
-            //----------자신이 맞은 collider의 Tag으로 피격 이펙트 결정------------------
+            //----------자신의 공격 collider의 Tag으로 피격 이펙트 결정------------------
             GetComponentInChildren<HeroAnimator>().hero_collider.tag = "Hero_SKILL01";
-            //----------------------------------------------------------------------------  
+            //-------------- 스킬의 공격력과 애니메이션 값을 넣어줌----------------------
             skill_control("SKILL01", 30f);
+            //---------------------------------------------------------------------------
+            camera_.GetComponent<CameraAction>().StartCoroutine("HeroSKILL01");
         }
         //==================================================================
     }
     //----연속 공격을 위해 STATE가 ATTACK일 때 A버튼이 눌리는걸 다시 확인---
     void ComboAttack()
     {
+        state_timer += Time.deltaTime;
+
         if (Input.GetKeyDown(KeyCode.A))
         {
             animator.SetTrigger("HeroAttack");
         }
+        //---------------------STATE 변경 오류시 IDLE로 변경-----
+        if (state_timer >= 2f)
+        {
+            state = STATE.IDLE;
+            state_timer = 0f;
+        }
+        //-------------------------------------------------------
     }
     //-----------------------------------------------------------------------
     //=================       스킬01 사용 중     ============================
@@ -214,7 +227,6 @@ public class HeroAction : MonoBehaviour
             }
             
         }
-
         else if (state != STATE.ATTACK && state != STATE.SKILL)
         {
             if (xweapontail.activeSelf)
@@ -224,11 +236,10 @@ public class HeroAction : MonoBehaviour
         }
     }
     //=================================================================================
-
     //============    스킬 정리   =====================================================
     void skill_control(string ani_name, float skill_att)
     {
-        animator.SetTrigger(ani_name);
+        animator.SetBool(ani_name,true);
         attack = skill_att;
         state = STATE.SKILL;
     }

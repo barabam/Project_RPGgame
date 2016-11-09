@@ -3,24 +3,17 @@ using System.Collections;
 
 public class PotalAction : MonoBehaviour
 {
-    public enum STATE
-    {
-        NONE,
-        IDLE,
-        START,
-        END,
-    }
     public GameObject exitpoint;
     public GameObject hero;
     public MobManager mobmanager;
+    public PotalManager potalmanager;
 
-    private STATE state;
     private float timer;
 
     void Awake()
     {
-        state = STATE.IDLE;
         mobmanager = GameObject.Find("MobManager").GetComponent<MobManager>();
+        potalmanager = GameObject.Find("PotalManager").GetComponent<PotalManager>();
     }
 
     void Update()
@@ -35,6 +28,9 @@ public class PotalAction : MonoBehaviour
         {
             if (timer <= 0)
             {
+                //-------          포탈 on / off        ------
+                potalmanager.GetComponent<PotalManager>().on_off = 1;
+                //--------------------------------------------
                 timer = 5f;
                 hero.transform.position = exitpoint.transform.position;
                 mobmanager.StartCoroutine("CreateMob");
@@ -42,8 +38,11 @@ public class PotalAction : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Space) && this.gameObject.name == "Cube")
         {
-            hero.transform.position = exitpoint.transform.position;
+            if (potalmanager.GetComponent<PotalManager>().on_off == 0)
+                hero.transform.position = exitpoint.transform.position;
+            else
+                Debug.Log("몬스터가 남아있습니다.");
         }
-        //---------------------------------------------------------------------------------------
     }
+    //---------------------------------------------------------------------------------------
 }

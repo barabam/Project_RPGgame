@@ -10,6 +10,7 @@ public class MobManager : MonoBehaviour
     public GameObject camera_;
     public GameObject map03;
     public int wave;
+    public GameObject currentCameraPath = null;
 
     private int mobCount;
 
@@ -54,6 +55,7 @@ public class MobManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
 
         GameObject bossMob = (GameObject)Resources.Load("Prefabs/Monster/Monster_King/Monster_King");
+        GameObject cameraPath = (GameObject)Resources.Load("Prefabs/CameraPath/CameraPath_BossCreate");
 
         GameObject mob = (GameObject)Instantiate(bossMob);
         mob.transform.parent = map03.transform;
@@ -63,6 +65,14 @@ public class MobManager : MonoBehaviour
 
         mob.GetComponent<BossAction>().navigation.enabled = true;
 
+        //==================================================================================
+        //mob.AddChild(cameraPath);
+
+        //GameObject cameraPath_CreatBoss = GameObject.Find("CameraPath_BossCreate(Clone)");
+
+        //currentCameraPath = cameraPath_CreatBoss;
+        //currentCameraPath.SendMessage("Play");
+        //===================================================================================
         camera_.GetComponent<CameraAction>().StartCoroutine("CreatBossEvent");
     }
     //==================================================================================================

@@ -77,7 +77,7 @@ public class MonsterAction : MonoBehaviour
         navigation.speed = 1f;
 
         //navigation.SetDestination(startpos);
-        if (dp > Mathf.Cos(60f * Mathf.Deg2Rad) && length < 5)
+        if (dp > Mathf.Cos(60f * Mathf.Deg2Rad) && length < 10)
         {
             state = STATE.CHASE;
             animator.SetBool("move", true);
@@ -98,12 +98,12 @@ public class MonsterAction : MonoBehaviour
     {
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
-        if (length > 2 && length < 10)   //-------시야,감지범위에 들어가고, 공격범위까지
+        if (length > 2f && length < 30f)   //-------시야,감지범위에 들어가고, 공격범위까지
         {
             animator.SetBool("move", true);
             navigation.SetDestination(hero.transform.position);
         }
-        else if (length >= 10)                                                  //----------일정 사거리 이상 벗어났을 경우
+        else if (length >= 30f)                                                  //----------일정 사거리 이상 벗어났을 경우
         {
             animator.SetBool("move", false);
             navigation.SetDestination(startpos);

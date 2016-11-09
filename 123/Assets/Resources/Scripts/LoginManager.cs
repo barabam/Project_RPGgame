@@ -6,7 +6,6 @@ using System;
 
 public class LoginManager : MonoBehaviour
 {
-
     public UIInput id;
     public UIInput pw;
 

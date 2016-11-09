@@ -44,12 +44,14 @@ public class BossAction : MonoBehaviour
     private Vector3 other = new Vector3();
     private float dp;
     private Animator animator;
+    private PotalManager potalmanager;
 
     void Awake()
     {
         col = this.GetComponent<CapsuleCollider>();
         hero = GameObject.Find("Hero01");
         animator = this.GetComponentInChildren<Animator>();
+        potalmanager = GameObject.Find("PotalManager").GetComponent<PotalManager>();
         navigation = GetComponent<NavMeshAgent>();
         startpos = this.transform.position;
         navigation.speed = 5f;
@@ -100,7 +102,7 @@ public class BossAction : MonoBehaviour
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
         navigation.SetDestination(startpos);
-        if (dp > Mathf.Cos(60f * Mathf.Deg2Rad) && length < 5)
+        if (dp > Mathf.Cos(60f * Mathf.Deg2Rad) && length < 15)
         {
             state = STATE.CHASE;
             animator.SetBool("move", true);
@@ -121,7 +123,7 @@ public class BossAction : MonoBehaviour
 
         float length = Vector3.Distance(hero.transform.position, transform.position);
 
-        if (length > 3f && length < 10f)                                          //-------시야,감지범위에 들어가고, 공격범위까지
+        if (length > 3f)                                          //-------시야,감지범위에 들어가고, 공격범위까지
         {
             animator.SetBool("move", true);
             navigation.SetDestination(hero.transform.position);
@@ -223,7 +225,10 @@ public class BossAction : MonoBehaviour
         die_timer += Time.deltaTime;
 
         if (die_timer >= 5f)
+        {
             Destroy(this.gameObject);
+            potalmanager.GetComponent<PotalManager>().on_off = 0;
+        }
     }
     //--------------------------------------------------------------------------------
     //--------------------hero의 무기에 맞았을 경우-----------------------------------
@@ -255,7 +260,7 @@ public class BossAction : MonoBehaviour
             }
         }
     }
-    //--------------------------------------------------------------------------------
+    //--------------------------자신의 체력이 50퍼센트 이하일 때 최대 체력의 4분에 1을 회복-----------------------------
 
     public IEnumerator hp_heal()
     {
@@ -266,4 +271,5 @@ public class BossAction : MonoBehaviour
             yield return new WaitForSeconds(0.7f);
         }
     }
+    //-------------------------------------------------------------------------------------------------------------------
 }

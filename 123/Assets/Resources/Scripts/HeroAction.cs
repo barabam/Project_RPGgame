@@ -5,8 +5,12 @@ public class HeroAction : MonoBehaviour
 {
     public int lv = 1;
     public float hp = 100f;
+    public float mp = 100f;
     public float attack = 10f;
+    public float defence = 0f;
     public float move_speed = 10f;                               //움직임 속도
+    public float exp = 0f;
+
     public GameObject xweapontail;
     public GameObject camera_;
 
@@ -26,6 +30,7 @@ public class HeroAction : MonoBehaviour
     private float debuff_timer;
     private Animator animator;                                  //자식의 애니메이션이 들어갈 자리.
     private Vector3 move_vector;
+    private float debuff_move_speed;
     private float monster_attack;
     private float boss_attack;
     private float state_timer;                                  //스테이트 오류가 발생할 시 주기적으로 IDLE로 STATE를 변경시켜줌
@@ -37,6 +42,7 @@ public class HeroAction : MonoBehaviour
         //==============  자식의 애니메이션을 사용  ======================
         animator = GetComponentInChildren<Animator>();
         //================================================================
+        debuff_move_speed = move_speed / 2;
     }
 
     void Update()
@@ -99,39 +105,39 @@ public class HeroAction : MonoBehaviour
 
     private void CheckKeyDown()
     {
-        //============= 눌린 버튼 검사 함수 ================================
+        //============= 눌린 버튼 검사 함수 ============================================
         if (move_vector != new Vector3(0f, 0f, 0f))
             state = STATE.RUN;
         else
             state = STATE.IDLE;
-        //-------------       움직임       ---------------------------------
+        //-------------       움직임       ---------------------------------------------
         if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.LeftArrow)
          || Input.GetKey(KeyCode.UpArrow) || Input.GetKey(KeyCode.DownArrow))
         {
             state = STATE.RUN;
         }
-        //-------------        공격        ---------------------------------
+        //-------------        공격        -----------------------------------------------
         if (Input.GetKeyDown(KeyCode.A))
         {
-            //----------자신이 맞은 collider의 Tag으로 피격 이펙트 결정------------------
+            //----자신이 맞은 collider의 Tag으로 피격 이펙트를 결정하므로 Tag 이름 변경----
             GetComponentInChildren<HeroAnimator>().hero_collider.tag = "Hero_Normal";
-            //----------------------------------------------------------------------------  
+            //-----------------------------------------------------------------------------  
             animator.SetTrigger("HeroAttack");
             attack = 100f;
             state = STATE.ATTACK;
             onoff_WeaponTail();
         }
-        //-----------------        스킬01       ---------------------------
+        //-----------------        스킬01       --------------------------------------------
         if (Input.GetKeyDown(KeyCode.S))
         {
-            //----------자신의 공격 collider의 Tag으로 피격 이펙트 결정------------------
+            //----자신이 맞은 collider의 Tag으로 피격 이펙트를 결정하므로 Tag 이름 변경----
             GetComponentInChildren<HeroAnimator>().hero_collider.tag = "Hero_SKILL01";
-            //-------------- 스킬의 공격력과 애니메이션 값을 넣어줌----------------------
+            //-------------- 스킬의 공격력과 애니메이션 값을 넣어줌------------------------
             skill_control("SKILL01", 30f);
-            //---------------------------------------------------------------------------
+            //-----------------------------------------------------------------------------
             camera_.GetComponent<CameraAction>().StartCoroutine("HeroSKILL01");
         }
-        //==================================================================
+        //==================================================================================
     }
     //----연속 공격을 위해 STATE가 ATTACK일 때 A버튼이 눌리는걸 다시 확인---
     void ComboAttack()
@@ -205,11 +211,14 @@ public class HeroAction : MonoBehaviour
                 timer = 0f;
             }
         }
+    }
+    //-------------------------    스모그처럼 쭉 검사해야하는 경우 -------------------
+    void OnTriggerStay(Collider col)
+    {
         if (col.tag == "debuff_smog")
         {
             if (debuff_timer > 10f)
             {
-                Debug.Log("smog");
                 StartCoroutine("debuff_off");
             }
         }
@@ -247,13 +256,9 @@ public class HeroAction : MonoBehaviour
     //-------------------------디버프 : 이동 속도 감소---------------------------------
     IEnumerator debuff_off()
     {
-        move_speed = move_speed / 2;
-
-        debuff_timer = 0f;
-
-        yield return new WaitForSeconds(10f);
-
-        move_speed = move_speed * 2;
+        move_speed = debuff_move_speed / 2;
+        yield return new WaitForSeconds(1f);
+        move_speed = debuff_move_speed;
     }
     //=================================================================================
 }
